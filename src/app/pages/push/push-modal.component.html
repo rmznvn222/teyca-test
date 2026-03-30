@@ -1,0 +1,77 @@
+<div class="modal-overlay" (click)="onOverlayClick()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal__header">
+        <h2>Новая Push-рассылка</h2>
+        <button class="modal__close" type="button" (click)="close.emit()">
+          <svg class="svg-close" icon="close-modal"></svg>
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <div class="form-group">
+          <label for="message">Текст сообщения</label>
+
+          <div class="input-wrapper">
+            <span class="icon"></span>
+
+            <textarea
+              id="message"
+              formControlName="message"
+              aria-label="Сообщение"
+            ></textarea>
+
+            <button type="button" class="add-btn" (click)="toggleEmoji()">
+              <svg class="svg-plus" icon="plus"></svg>
+            </button>
+          </div>
+
+          @if (form.get("message")?.invalid && form.get("message")?.touched) {
+            <small style="color: red"> Сообщение обязательно </small>
+          }
+        </div>
+
+        @if (openEmoji()) {
+          <emoji-mart (emojiSelect)="addEmoji($event)"></emoji-mart>
+        }
+        <div class="form-group">
+          <label>Превью</label>
+
+          <div class="preview">
+            <svg icon="modal" class="svg-modal"></svg>
+
+            <div class="preview__content">
+              <div class="preview__title">Имя отправителя</div>
+              <div class="preview__text">
+                {{ form.get("message")?.value }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group"></div>
+        <div class="form-group">
+          <label>Дата отправки рассылки</label>
+
+          <app-custom-select formControlName="mode"></app-custom-select>
+        </div>
+
+        @if (form.get("mode")?.value === "scheduled") {
+          <div class="form-group">
+            <label>Дата отправки</label>
+
+            <input type="datetime-local" formControlName="date" />
+          </div>
+        }
+      </div>
+
+      <div class="modal__footer">
+        <button type="button" class="btn btn--secondary" (click)="close.emit()">
+          Отмена
+        </button>
+
+        <button type="submit" class="btn btn--primary">Отправить</button>
+      </div>
+    </form>
+  </div>
+</div>

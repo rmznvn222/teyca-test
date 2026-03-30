@@ -1,0 +1,23 @@
+<div class="custom-select" [class.disabled]="disabled">
+
+  <div class="custom-select__trigger" (click)="toggleOpen()">
+    <div class="custom-select__value">
+      {{ value === 'now' ? 'Сейчас' : 'Выбрать дату' }}
+    </div>
+  </div>
+
+  @if (isOpen) {
+    <div class="custom-select__dropdown">
+
+      <div class="option" (click)="selectNow()">
+        Сейчас
+      </div>
+
+      <div class="option" (click)="selectScheduled()">
+        Выбрать дату
+      </div>
+
+    </div>
+  }
+
+</div>

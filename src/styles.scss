@@ -1,0 +1,22 @@
+:root {
+  --text-color: #1F1F1F;
+  --text-muted: #999;
+  --text-secondary: #667085;
+  --border: #e5e7eb;
+  --border-light: #f1f1f1;
+  --bg-hover: #ffffff;
+  --primary: #d3f200;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+   font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    sans-serif;
+}

@@ -1,0 +1,129 @@
+<div class="page">
+  <div class="card">
+    <div class="page-header">
+      <div>
+        <h1>Таблица клиентов</h1>
+        <p>
+          В этом разделе у вас есть возможность отправлять рассылки, а также
+          редактировать информацию о ваших клиентах.
+        </p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" placeholder="Поиск" [formControl]="id" />
+
+      <button class="btn-secondary" (click)="openPush()">
+        Отправить Push
+        <svg class="svg-vector" icon="vector"></svg>
+      </button>
+    </div>
+    <div class="table-wrapper">
+      <div class="table-scroll">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="checkbox">
+                <input
+                  type="checkbox"
+                  (change)="toggleAll($event)"
+                  aria-label="Выбрать все"
+                />
+              </th>
+              <th>ID</th>
+              <th>Устройство</th>
+              <th>Макет карты</th>
+              <th>Номер карты</th>
+              <th>Фамилия</th>
+              <th>Имя</th>
+              <th>Телефон</th>
+              <th>Скидка</th>
+              <th>Бонусы</th>
+              <th>Средний чек</th>
+              <th>Сумма покупок</th>
+              <th>Ссылка на карту</th>
+              <th>Дата создания</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (item of clients(); track $index) {
+              <tr>
+                <td class="checkbox">
+                  <input
+                    type="checkbox"
+                    [checked]="selectedIds().has(item.user_id)"
+                    (change)="toggleClient(item.user_id, $event)"
+                    aria-label="Выбрать"
+                  />
+                </td>
+                <td>{{ item.user_id }}</td>
+                <td>iphone</td>
+                <td>{{ item.template }}</td>
+                <td>{{ item.barcode }}</td>
+                <td>{{ item.last_name }}</td>
+                <td>{{ item.first_name }}</td>
+                <td>{{ item.phone }}</td>
+                <td>{{ item.discount? item.discount: '0%' }}%</td>
+                <td>{{ item.bonus }}</td>
+                <td>
+                  {{
+                    item.visits_all
+                      ? (+item.summ_all / +item.visits_all | number: "1.0-0")
+                      : 0
+                  }}
+                </td>
+                <td>{{ item.summ_all || 0 }}</td>
+                <td class="center download">
+                  <a href="https://max.ru/">
+                    <svg icon="download" class="svg-download"></svg>
+                  </a>
+                </td>
+                <td>{{ item.created_at | date: "HH:mm dd.MM.yyyy" }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <div class="pagination__left">
+          <span class="pagination__label">Элементов на странице:</span>
+
+          <div class="pagination__select">
+            <select
+              [value]="limit()"
+              (change)="setLimit($any($event.target).value)"
+              aria-label="Выбери диапазон"
+            >
+              <option [value]="10">10</option>
+              <option [value]="20">20</option>
+              <option [value]="50">50</option>
+            </select>
+            <span class="arrow">▾</span>
+          </div>
+
+          <span class="pagination__info">
+            {{ startItem() }}–{{ endItem() }} из {{ total() }}
+          </span>
+        </div>
+
+        <div class="pagination__right">
+          <div class="pagination__controls">
+            <button class="pagination__btn" (click)="firstPage()">‹‹</button>
+            <button class="pagination__btn" (click)="prevPage()">‹</button>
+            <button class="pagination__btn" (click)="nextPage()">›</button>
+            <button class="pagination__btn" (click)="lastPage()">››</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (showPush()) {
+  <app-push-modal
+    (close)="closePush()"
+    [userIds]="selectedIdsArray()"
+  ></app-push-modal>
+}
